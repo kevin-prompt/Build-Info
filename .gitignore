@@ -1,0 +1,34 @@
+# Docs: https://git-scm.com/docs/gitignore
+# Good overview of leading slash: https://stackoverflow.com/questions/24139478/when-to-use-leading-slash-in-gitignore
+# Built application files.
+/build/
+/*/build/
+
+# Crashlytics configuations.
+com_crashlytics_export_strings.xml
+
+# Local configuration file (sdk path, etc).
+/local.properties
+
+# Gradle generated files.
+/.gradle/
+
+# Signing files.
+/.signing/
+
+# User-specific configurations.
+/.idea/
+*.iml
+
+# Files generated when running the Layout Inspector or the Method Tracing in Android Studio
+/captures
+
+# OS-specific files that might show up anywhere, leaving off the leading slash searches all directories.
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.externalNativeBuild
+ehthumbs.db
+Thumbs.db
