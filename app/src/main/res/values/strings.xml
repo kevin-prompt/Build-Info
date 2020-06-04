@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Build Info</string>
+    <string name="lbl_device">DEVICE: %s</string>
 </resources>

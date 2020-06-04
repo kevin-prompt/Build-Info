@@ -3,23 +3,17 @@ package com.coolftc.buildinfo;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.telephony.CellInfo;
-import android.telephony.CellSignalStrength;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.widget.TextView;
 
-import java.util.List;
-import java.util.Locale;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView holdValue;
         holdValue = findViewById(R.id.bi_device);
-        holdValue.setText("DEVICE: " + Build.DEVICE);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_device), Build.DEVICE));
 
         holdValue = findViewById(R.id.bi_display);
         holdValue.setText("DISPLAY: " + Build.DISPLAY + screenPixels() + "\n Screen Density: " + getScreenDensity());
