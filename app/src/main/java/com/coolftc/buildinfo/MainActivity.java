@@ -1,6 +1,7 @@
 package com.coolftc.buildinfo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,46 +15,65 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import java.util.Locale;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    public String identifier() {
+        String DEVICE_LAYOUT = "%s: :%s: :%s: : %s: :%d";
+        return String.format(Locale.US, DEVICE_LAYOUT, max50(Build.MANUFACTURER), max50(Build.MODEL), max50(Build.DEVICE), max50(Build.ID), someNbr());
+    }
+    private String max50(String in) { return in.length() > 50 ? in.substring(0, 50) : in.trim(); }
+    private int someNbr() { return new Random().nextInt(1000000000 - 100000000) + 100000000; }
 
+
+
+    @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        int zero = 0;
         TextView holdValue;
+        holdValue = findViewById(R.id.bi_unique);
+        holdValue.setText(identifier());
+
         holdValue = findViewById(R.id.bi_device);
         holdValue.setText(String.format(getResources().getString(R.string.lbl_device), Build.DEVICE));
 
         holdValue = findViewById(R.id.bi_display);
-        holdValue.setText("DISPLAY: " + Build.DISPLAY + screenPixels() + "\n Screen Density: " + getScreenDensity());
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_display), Build.DISPLAY + screenPixels(), getScreenDensity()));
 
         holdValue = findViewById(R.id.bi_hardware);
-        holdValue.setText("HARDWARE: " + Build.HARDWARE);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_hardware), Build.HARDWARE));
 
         holdValue = findViewById(R.id.bi_modelid);
-        holdValue.setText("ID: " + Build.ID);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_id), Build.ID));
 
         holdValue = findViewById(R.id.bi_manufacturer);
-        holdValue.setText("MANUFACTURER: " + Build.MANUFACTURER);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_manufacturer), Build.MANUFACTURER));
 
         holdValue = findViewById(R.id.bi_model);
-        holdValue.setText("MODEL: " + Build.MODEL);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_model), Build.MODEL));
 
         holdValue = findViewById(R.id.bi_product);
-        holdValue.setText("PRODUCT: " + Build.PRODUCT);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_product), Build.PRODUCT));
 
         holdValue = findViewById(R.id.bi_osversion);
-        holdValue.setText("OS VER: v" + Build.VERSION.RELEASE + " (api " + Build.VERSION.SDK_INT + ")");
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_osver), Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
 
         holdValue = findViewById(R.id.bi_radio);
-        holdValue.setText("RADIO USED: " + radioInUse());
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_radio), radioInUse()));
 
         holdValue = findViewById(R.id.bi_network);
-        holdValue.setText("NETWORK: " + networkOperator() + "\n  status: " + networkConnection() + "\n  roaming: " + isRoamingNow() + "\n  signal: " + signalStrength());
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_network), networkOperator(), networkConnection(), isRoamingNow(), signalStrength()));
+
+        holdValue = findViewById(R.id.bi_features);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_features),
+                isItThere(PackageManager.FEATURE_CAMERA_FRONT, zero), isItThere(PackageManager.FEATURE_CAMERA_ANY, Build.VERSION_CODES.JELLY_BEAN_MR1),
+                isItThere(PackageManager.FEATURE_FINGERPRINT, Build.VERSION_CODES.M), isItThere(PackageManager.FEATURE_BLUETOOTH_LE,  zero)
+        ));
 
 
         TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -63,8 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
                 return;
@@ -85,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private String isItThere(String feature, int minver){
+        if(android.os.Build.VERSION.SDK_INT < minver) return "UNKNOWN";
+        return  String.valueOf(getApplicationContext().getPackageManager().hasSystemFeature(feature));
     }
 
     private String radioInUse(){
@@ -178,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
-            return String.format(Locale.US, "\n  height: %d, width: %d", displayMetrics.heightPixels, displayMetrics.widthPixels);
+            return String.format(Locale.US, "\nheight: %d, width: %d", displayMetrics.heightPixels, displayMetrics.widthPixels);
         } catch (Exception ex) {
             return "";
         }

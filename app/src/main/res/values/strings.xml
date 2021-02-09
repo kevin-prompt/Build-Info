@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Build Info</string>
     <string name="lbl_device">DEVICE: %s</string>
+    <string name="lbl_display">DISPLAY: %s \n Screen Density: %s</string>
+    <string name="lbl_hardware">HARDWARE: %s</string>
+    <string name="lbl_id">ID: %s</string>
+    <string name="lbl_manufacturer">MANUFACTURER: %s</string>
+    <string name="lbl_model">MODEL: %s</string>
+    <string name="lbl_product">PRODUCT: %s</string>
+    <string name="lbl_osver">OS VER: v%s (api %d)</string>
+    <string name="lbl_radio">RADIO USED: %s</string>
+    <string name="lbl_network">NETWORK: %s \n status: %s \n roaming %s \n signal %s</string>
+    <string name="lbl_features">FEATURES:\n Any Camera: %s \n Front Camera: %s \n Fingerprint: %s \n Bluetooth LE: %s</string>
 </resources>
