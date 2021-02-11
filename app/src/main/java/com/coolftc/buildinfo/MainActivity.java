@@ -19,15 +19,6 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    public String identifier() {
-        String DEVICE_LAYOUT = "%s: :%s: :%s: : %s: :%d";
-        return String.format(Locale.US, DEVICE_LAYOUT, max50(Build.MANUFACTURER), max50(Build.MODEL), max50(Build.DEVICE), max50(Build.ID), someNbr());
-    }
-    private String max50(String in) { return in.length() > 50 ? in.substring(0, 50) : in.trim(); }
-    private int someNbr() { return new Random().nextInt(1000000000 - 100000000) + 100000000; }
-
-
-
     @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +63,11 @@ public class MainActivity extends AppCompatActivity {
         holdValue = findViewById(R.id.bi_features);
         holdValue.setText(String.format(getResources().getString(R.string.lbl_features),
                 isItThere(PackageManager.FEATURE_CAMERA_FRONT, zero), isItThere(PackageManager.FEATURE_CAMERA_ANY, Build.VERSION_CODES.JELLY_BEAN_MR1),
-                isItThere(PackageManager.FEATURE_FINGERPRINT, Build.VERSION_CODES.M), isItThere(PackageManager.FEATURE_BLUETOOTH_LE,  zero)
+                isItThere(PackageManager.FEATURE_FINGERPRINT, Build.VERSION_CODES.M), isItThere(PackageManager.FEATURE_BLUETOOTH_LE, zero)
         ));
 
 
         TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -94,15 +84,16 @@ public class MainActivity extends AppCompatActivity {
 
         int sim = tm.getSimState();
 
-        int carrierid;
+        int carrierId;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             // https://android.googlesource.com/platform/packages/providers/TelephonyProvider/+/master/assets/carrier_list.textpb
-            carrierid = tm.getCarrierIdFromSimMccMnc();
-            if(carrierid > 0) {
-                int j = carrierid;
+            carrierId = tm.getCarrierIdFromSimMccMnc();
+            if(carrierId > 0) {
+                int j = carrierId;
                 String t = "";
             }
         }
+
 
     }
 
@@ -271,4 +262,12 @@ public class MainActivity extends AppCompatActivity {
 
         return density;
     }
+
+    public String identifier() {
+        String DEVICE_LAYOUT = "%s: :%s: :%s: : %s: :%d";
+        return String.format(Locale.US, DEVICE_LAYOUT, max50(Build.MANUFACTURER), max50(Build.MODEL), max50(Build.DEVICE), max50(Build.ID), someNbr());
+    }
+    private String max50(String in) { return in.length() > 50 ? in.substring(0, 50) : in.trim(); }
+    private int someNbr() { return new Random().nextInt(1000000000 - 100000000) + 100000000; }
+
 }
