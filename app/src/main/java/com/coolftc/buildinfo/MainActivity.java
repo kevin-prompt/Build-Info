@@ -2,6 +2,7 @@ package com.coolftc.buildinfo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
         holdValue = findViewById(R.id.bi_manufacturer);
         holdValue.setText(String.format(getResources().getString(R.string.lbl_manufacturer), Build.MANUFACTURER));
 
+        holdValue = findViewById(R.id.bi_ram);
+//        ActivityManager actManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+//        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+//        actManager.getMemoryInfo(memInfo);
+//        double availableMemory = (double) memInfo.availMem;
+//        double totalMemory = (double) memInfo.totalMem;
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_ram), ramAvailable()/(1024*1024*1024), ramTotal()/(1024*1024*1024)));
+
         holdValue = findViewById(R.id.bi_model);
         holdValue.setText(String.format(getResources().getString(R.string.lbl_model), Build.MODEL));
 
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             ServiceState ss = tm.getServiceState();
+            assert ss != null;
             int abc = ss.getState();
         }
 
@@ -89,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
             // https://android.googlesource.com/platform/packages/providers/TelephonyProvider/+/master/assets/carrier_list.textpb
             carrierId = tm.getCarrierIdFromSimMccMnc();
             if(carrierId > 0) {
-                int j = carrierId;
                 String t = "";
             }
         }
@@ -97,9 +106,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String isItThere(String feature, int minver){
-        if(android.os.Build.VERSION.SDK_INT < minver) return "UNKNOWN";
+    private String isItThere(String feature, int minVersion){
+        if(android.os.Build.VERSION.SDK_INT < minVersion) return "UNKNOWN";
         return  String.valueOf(getApplicationContext().getPackageManager().hasSystemFeature(feature));
+    }
+
+    private double ramAvailable() {
+        try {
+            ActivityManager actManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+            actManager.getMemoryInfo(memInfo);
+            return memInfo.availMem;
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
+    private double ramTotal() {
+        try {
+            ActivityManager actManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+            actManager.getMemoryInfo(memInfo);
+            return memInfo.totalMem;
+        } catch (Exception ex) {
+            return 0;
+        }
     }
 
     private String radioInUse(){
@@ -182,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
             if(tm == null) return "Unknown";
-            String holdContry = tm.getNetworkCountryIso().length() > 0 ? tm.getNetworkCountryIso() : tm.getSimCountryIso();
-            return tm.getNetworkOperatorName() + " (" + holdContry + ")";
+            String holdCountry = !tm.getNetworkCountryIso().isEmpty() ? tm.getNetworkCountryIso() : tm.getSimCountryIso();
+            return tm.getNetworkOperatorName() + " (" + holdCountry + ")";
         } catch (Exception ex) {
             return ex.getMessage();
         }
@@ -200,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *  The density definitions can be found here https://developer.android.com/reference/android/util/DisplayMetrics.html#summary
+     *  The density definitions can be found here <a href="https://developer.android.com/reference/android/util/DisplayMetrics.html#summary">...</a>
      *  Probably just need to look for higher densities over time.
      *  To use as a Function, make it static and require a Context be passed in.
      */

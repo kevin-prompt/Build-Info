@@ -11,4 +11,5 @@
     <string name="lbl_radio">RADIO USED: %s</string>
     <string name="lbl_network">NETWORK: %s \n status: %s \n roaming %s \n signal %s</string>
     <string name="lbl_features">FEATURES:\n Any Camera: %s \n Front Camera: %s \n Fingerprint: %s \n Bluetooth LE: %s</string>
+    <string name="lbl_ram">RAM Available: %.1fGB Total: %.1fGB</string>
 </resources>
