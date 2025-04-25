@@ -56,6 +56,15 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bi_hardware" />
 
+        <TextView android:id="@+id/bi_disk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bi_ram" />
+
         <TextView android:id="@+id/bi_modelid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,7 +72,7 @@
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bi_ram" />
+            app:layout_constraintTop_toBottomOf="@+id/bi_disk" />
 
         <TextView android:id="@+id/bi_manufacturer"
             android:layout_width="wrap_content"

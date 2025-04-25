@@ -3,6 +3,7 @@ package com.coolftc.buildinfo;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,12 +49,10 @@ public class MainActivity extends AppCompatActivity {
         holdValue.setText(String.format(getResources().getString(R.string.lbl_manufacturer), Build.MANUFACTURER));
 
         holdValue = findViewById(R.id.bi_ram);
-//        ActivityManager actManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-//        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
-//        actManager.getMemoryInfo(memInfo);
-//        double availableMemory = (double) memInfo.availMem;
-//        double totalMemory = (double) memInfo.totalMem;
         holdValue.setText(String.format(getResources().getString(R.string.lbl_ram), ramAvailable()/(1024*1024*1024), ramTotal()/(1024*1024*1024)));
+
+        holdValue = findViewById(R.id.bi_disk);
+        holdValue.setText(String.format(getResources().getString(R.string.lbl_disk), freeDiskSpace(this)/(1024*1024*1024), totalDiskSpace(this)/(1024*1024*1024)));
 
         holdValue = findViewById(R.id.bi_model);
         holdValue.setText(String.format(getResources().getString(R.string.lbl_model), Build.MODEL));
@@ -128,6 +128,24 @@ public class MainActivity extends AppCompatActivity {
             ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
             actManager.getMemoryInfo(memInfo);
             return memInfo.totalMem;
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
+    // Function returns the amount of free disk space in bytes
+    private double freeDiskSpace(Context ctx) {
+        try {
+            return Objects.requireNonNull(ctx.getExternalFilesDir(null)).getFreeSpace();
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
+    // Function returns the total disk space in bytes
+    private double totalDiskSpace(Context ctx) {
+        try {
+            return Objects.requireNonNull(ctx.getExternalFilesDir(null)).getTotalSpace();
         } catch (Exception ex) {
             return 0;
         }
